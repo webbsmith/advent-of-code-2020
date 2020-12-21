@@ -51,6 +51,7 @@ public class Day21Part02 {
                     String allergenIngredient = ingredientsWithMax.get(0);
                     ingredientsWithAllergens.add(allergenIngredient);
                     allergen.ingredientFound = true;
+                    allergen.containingIngredient = allergenIngredient;
                     allergensFound++;
                     while (allIngredients.contains(allergenIngredient)) {
                         allIngredients.remove(allergenIngredient);
@@ -59,14 +60,19 @@ public class Day21Part02 {
             }
         } while (allergensFound < allergens.size());
 
-        System.out.println("allergen-containing ingredients: " + ingredientsWithAllergens);
-        System.out.println("non-allergen ingredients: " + allIngredients);
-        System.out.println("non-allergen ingredient count: " + allIngredients.size());
+        List<Allergen> sortedAllergenList = new ArrayList<>(allergens.values());
+        Collections.sort(sortedAllergenList);
+        StringBuilder dangerousIngredientList = new StringBuilder();
+        for (Allergen a : sortedAllergenList) {
+            dangerousIngredientList.append(a.containingIngredient).append(",");
+        }
+        System.out.println("canonical dangerous ingredient list: " + dangerousIngredientList.substring(0, dangerousIngredientList.length() - 1));
     }
 
-    private static class Allergen {
+    private static class Allergen implements Comparable<Allergen> {
         private final String name;
         private final Map<String, Integer> possibleIngredients;
+        private String containingIngredient;
         private boolean ingredientFound;
 
         public Allergen(String name, String[] initialIngredients) {
@@ -95,6 +101,11 @@ public class Day21Part02 {
         @Override
         public int hashCode() {
             return Objects.hash(name);
+        }
+
+        @Override
+        public int compareTo(Allergen o) {
+            return this.name.compareTo(o.name);
         }
     }
 }
