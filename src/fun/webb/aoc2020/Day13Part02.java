@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// too slow
+// too slow, doesn't complete for days
 public class Day13Part02 {
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(Path.of("inputs/day13.txt"));
@@ -26,12 +26,6 @@ public class Day13Part02 {
             }
         }
         long startingIdx = largestId;
-        for (long i = 100000000000000L; i < i + largestId; i++) {
-            if (i % largestId == 0) {
-                startingIdx = i;
-                break;
-            }
-        }
         System.out.println(startingIdx);
         long earliestTimestamp = -1;
         for (long i = startingIdx; i < Long.MAX_VALUE; i += largestId) {
